@@ -20,7 +20,6 @@ class Users(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
-    category_description = models.TextField(blank=True,verbose_name="Описание")
     created_at = models.DateTimeField(auto_now_add=True,verbose_name="Дата добавления")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
 
@@ -32,19 +31,27 @@ class Category(models.Model):
         verbose_name_plural = "Категории"
 
 
-class Product(models.Model):
-    CATEGORY_CHOICES = (
-        ('phone', 'Телефоны'),
-        ('laptop', 'Ноутбуки'),
-    )
-
-
-
+class Brand(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES,verbose_name="Категория" )
-    category_model = models.ForeignKey(Category, on_delete=models.CASCADE,verbose_name="Модель")
+    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Дата добавления")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Бренд"
+        verbose_name_plural = "Бренды"
+        
+
+
+
+class Product(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
+    name = models.CharField(max_length=100, verbose_name="Название")
     price = models.DecimalField(max_digits=10, decimal_places=2,verbose_name="Цена")
-    image = models.ImageField(upload_to='images/', verbose_name="Фото")
+    # images = models.ManyToManyField(ProductImage, related_name='product')
     description = models.TextField(verbose_name="Описание")
     cpu = models.CharField(max_length=100, verbose_name="Процессор")
     ram = models.IntegerField(verbose_name="Оперативная память")
@@ -63,7 +70,13 @@ class Product(models.Model):
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
  
-
+class ProductImage(models.Model):
+    image = models.ImageField(upload_to='product_images/')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+ 
+    def save(self, *args, **kwargs):
+        self.image.upload_to = 'product_images/'
+        super().save(*args, **kwargs)
 
 class Sale(models.Model):
     shop = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sales')
@@ -80,6 +93,9 @@ class Sale(models.Model):
 
     def str(self):
         return self.name
+
+    
+
 
 
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Users, Category, Sale
+from .models import Product, Users, Category, Sale, Brand
 
 
 
@@ -10,9 +10,18 @@ class UsersSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    # queryset = Category.objects.all()
+    # seralizer_class = 
     class Meta:
         model = Category
         fields = ('id', 'name', 'created_at', 'updated_at')
+
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = ('id', 'name', 'created_at', 'updated_at')
+
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -23,5 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class SaleSerializers(serializers.ModelSerializer):
     class Meta:
         model = Sale
-        fields = ('id', 'user', 'product', 'quantity', 'total_price', 'created_at', 'updated_at')
+        fields = ('id','shop', 'name', 'description', 'start_date', 'end_date', 'image', )
+    
+
 

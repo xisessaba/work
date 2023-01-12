@@ -18,7 +18,7 @@ DEBUG = True
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -30,9 +30,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'drf_yasg2',
+    'multiupload',
     'rest_framework',
     'shop.apps.ShopConfig',
+
 
 
 
@@ -75,7 +78,7 @@ WSGI_APPLICATION = 'onoi_store.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'onoidb',
+        'NAME': 'onoi_storedb3',
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST':'127.0.0.1',

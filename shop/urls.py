@@ -39,11 +39,46 @@ urlpatterns = [
         }
     ), name = 'products'),
 
+    path('sales/', views.SaleViewSet.as_view(
+        {
+            'get': 'list',
+            'post': 'create',
+        
+        }
+    ), name = 'sales'),
+
+    path('sales/<int:pk>/', views.SaleViewSet.as_view(
+        {
+            'get': 'retrieve',
+            'put': 'update',
+            'delete': 'destroy',
+            'patch': 'partial_update',
+
+        }
+    ), name = 'sales'),
+
+    path('brand/', views.SaleViewSet.as_view(
+        {
+            'get': 'list',
+            'post': 'create',
+
+        }
+    ), name = 'brand'),
+
+    path('brand/<int:pk>/', views.SaleViewSet.as_view(
+        {
+            'get': 'retrieve',
+            'put': 'update',
+            'delete': 'destroy',
+            'patch': 'partial_update',
+
+        }
+    ), name = 'brand'),
+
     # path('', views.index, name = 'home'),
     # path('phones', views.phone_list, name = 'phones'),
     # path('laptops', views.laptop_list, name = 'laptops'),
     # path('rassrochka', views.installment_plan, name = 'installment_plan'),
     
-
 
 ]
