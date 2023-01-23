@@ -2,6 +2,14 @@ __pycache__/
 
 .idea/
 
+
+product_images/
+
+images/
+
+media/
+
+
 db.sqlite3
 
 venv/

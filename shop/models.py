@@ -2,20 +2,6 @@ from django.db import models
 
 
 
-class Users(models.Model):
-    user = models.CharField(max_length=100, verbose_name="Пользователь")
-    phone = models.CharField(max_length=20, verbose_name="Телефон", unique=True)
-    email = models.EmailField(verbose_name="Почта")
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Дата добавления")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-
-    def __str__(self):
-        return self.user
-
-    class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
-
 
 
 class Category(models.Model):
@@ -32,6 +18,7 @@ class Category(models.Model):
 
 
 class Brand(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='brands', verbose_name='Категория')
     name = models.CharField(max_length=100, verbose_name="Название")
     created_at = models.DateTimeField(auto_now_add=True,verbose_name="Дата добавления")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
@@ -45,17 +32,36 @@ class Brand(models.Model):
         
 
 
+class ProductColor(models.Model):
+
+    name = models.CharField(max_length=100, verbose_name="Название")
+    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Дата добавления")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Цвет"
+        verbose_name_plural = "Цвета"
+
+    
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name='Категория')
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', verbose_name='Бренд')
     name = models.CharField(max_length=100, verbose_name="Название")
     price = models.DecimalField(max_digits=10, decimal_places=2,verbose_name="Цена")
-    # images = models.ManyToManyField(ProductImage, related_name='product')
+    image = models.ImageField(verbose_name='Фото')
+    images_2 = models.ImageField(null=True,blank=True,verbose_name='Фото(необязательно)')
+    images_3 = models.ImageField(null=True,blank=True,verbose_name='Фото(необязательно)')
+    images_4 = models.ImageField(null=True,blank=True,verbose_name='Фото(необязательно)')
+    images_5 = models.ImageField(null=True,blank=True,verbose_name='Фото(необязательно)')
     description = models.TextField(verbose_name="Описание")
-    cpu = models.CharField(max_length=100, verbose_name="Процессор")
-    ram = models.IntegerField(verbose_name="Оперативная память")
-    video = models.CharField(max_length=100, verbose_name="Видеокарта")
+    color = models.ForeignKey(ProductColor, on_delete=models.CASCADE, related_name='products', verbose_name='Цвет')
+    cpu = models.CharField(max_length=100, null=True, blank=True, verbose_name="Процессор")
+    ram = models.IntegerField(null=True, blank=True,verbose_name="Оперативная память")
+    video = models.CharField(max_length=100,null=True, blank=True, verbose_name="Видеокарта")
     lte_exists = models.BooleanField(default=True,verbose_name="В наличии")
     created_at = models.DateTimeField(auto_now_add=True,verbose_name="Дата добавления")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
@@ -70,13 +76,6 @@ class Product(models.Model):
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
  
-class ProductImage(models.Model):
-    image = models.ImageField(upload_to='product_images/')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
- 
-    def save(self, *args, **kwargs):
-        self.image.upload_to = 'product_images/'
-        super().save(*args, **kwargs)
 
 class Sale(models.Model):
     shop = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sales')
@@ -94,7 +93,28 @@ class Sale(models.Model):
     def str(self):
         return self.name
 
-    
+
+
+
+class Applications(models.Model):
+    shop = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='applications', verbose_name='Товар')
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    phone = models.CharField(max_length=100, verbose_name="Телефон")
+    whatsapp = models.CharField(max_length=100, verbose_name="Ватсап")
+    message = models.CharField(max_length=100, verbose_name="Сообщение")
+    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Дата добавления")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+
+    class Meta:
+        verbose_name = 'Заявка'
+        verbose_name_plural  = 'Заявки'
+
+    def str(self):
+        return self.name
+
+
+
+
 
 
 
