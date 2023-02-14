@@ -95,7 +95,6 @@ class SaleViewSet(viewsets.ModelViewSet):
 
 
 
-#НАПИШЕМ ТИПО ТАКОГО АПИ ЗАПРОСА ДЛЯ ФРОНТЕНДА ТОЛЬКО С ПОМОЩЬЮ КЛАССА
 
 
 
